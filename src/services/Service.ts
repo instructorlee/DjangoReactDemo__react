@@ -1,10 +1,12 @@
+import { config } from '../config';
+
 export default class Service {
     protected appName: string = "";
 
 
     protected _get<T>(path: string): Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            fetch(`${this.appName}/${path}`)
+            fetch(`${config.API_URL}/${this.appName}/${path}`)
                 .then((response: Response) => {
                     resolve(response.json());
                 })
@@ -69,8 +71,12 @@ export default class Service {
         return this._post<T>('/', model);
     }
 
-    public read<T>(modelId: number): Promise<T> {
-        return this._get<T>(`/${modelId}`);
+    public read<T>(modelId?: number): Promise<T> {
+        if (modelId) { // request specific entity
+            return this._get<T>(`${modelId}`);
+        } else { // request all entities
+            return this._get<T>(``);
+        }
     }
 
     public update<T>(data: any, modelId: number): Promise<T> {
