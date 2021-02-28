@@ -16,7 +16,7 @@ export default class Service {
 
     protected _post<T>(path: string, content: any, headers: {} = {} ): Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            fetch(`${this.appName}/${path}`, {
+            fetch(`${config.API_URL}/${this.appName}/${path}`, {
                 method: 'POST',
                 headers: {
                     ...headers,
@@ -34,7 +34,7 @@ export default class Service {
 
     protected _patch<T>(path: string, content: any, headers: {} = {} ): Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            fetch(`${this.appName}/${path}`, {
+            fetch(`${config.API_URL}/${this.appName}/${path}/`, {
                 method: 'PATCH',
                 headers: {
                     ...headers,
@@ -52,7 +52,7 @@ export default class Service {
 
     protected _delete<T>(path: string, headers: {} = {} ): Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            fetch(`${this.appName}/${path}`, {
+            fetch(`${config.API_URL}/${this.appName}/${path}/`, {
                 method: 'DELETE',
                 headers: {
                     ...headers,
@@ -62,13 +62,13 @@ export default class Service {
                     }
                 }
             })
-                .then((response: Response) => resolve(response.json()))
+                .then((response: Response) => resolve(('') as any))
                 .catch( err => reject(err))
         })
     }
 
     public create<T>(model: T): Promise<T> {
-        return this._post<T>('/', model);
+        return this._post<T>('', model);
     }
 
     public read<T>(modelId?: number): Promise<T> {
@@ -80,10 +80,10 @@ export default class Service {
     }
 
     public update<T>(data: any, modelId: number): Promise<T> {
-        return this._patch<T>(`/${modelId}`, data);
+        return this._patch<T>(`${modelId}`, data);
     }
 
     public delete<T>(modelId: number): Promise<T> {
-        return this._delete<T>(`/${modelId}`);
+        return this._delete<T>(`${modelId}`);
     }
 }
